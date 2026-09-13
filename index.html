@@ -441,8 +441,12 @@
   /* ---------- FOOTER ---------- */
   footer{background:var(--bg-soft);border-top:1px solid var(--line);padding:72px 0 130px}
   @media(min-width:900px){footer{padding-bottom:56px}}
-  .footer-grid{display:grid;grid-template-columns:1fr;gap:44px}
-  @media(min-width:760px){.footer-grid{grid-template-columns:1.4fr 1fr 1fr 1.2fr}}
+  .footer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px 20px}
+  .footer-brand,.footer-col-contact{grid-column:1/-1}
+  @media(min-width:760px){
+    .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:44px}
+    .footer-brand,.footer-col-contact{grid-column:auto}
+  }
   .footer-brand p{font-size:13.5px;color:var(--text-mute);margin:14px 0 18px;max-width:32ch}
   .social-row{display:flex;gap:10px}
   .social-row a{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:border-color .2s}
@@ -1138,7 +1142,7 @@
         <li><a href="#menu" data-jump="drinks">Beverages</a></li>
       </ul>
     </div>
-    <div class="footer-col">
+    <div class="footer-col footer-col-contact">
       <h6>Contact</h6>
       <ul class="footer-contact">
         <li><svg aria-hidden="true"><use href="#i-pin"/></svg><span>No. 25, Pallewela, Gampola 20500, Sri Lanka</span></li>
