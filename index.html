@@ -440,8 +440,11 @@
   .field-icon input::-webkit-calendar-picker-indicator{display:none;-webkit-appearance:none}
   .field-icon input::-webkit-date-and-time-value{text-align:left}
   .field-icon-svg{flex:0 0 auto;width:18px;height:18px;color:var(--gold-soft);pointer-events:none}
-  .field-placeholder{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-mute);font-size:16px;pointer-events:none;transition:opacity .15s}
-  .field-icon input:valid ~ .field-placeholder{opacity:0}
+  .field-placeholder{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-mute);font-size:16px;pointer-events:none;transition:opacity .15s;opacity:0}
+  @media (pointer:coarse){
+    .field-placeholder{opacity:1}
+    .field-icon input:valid ~ .field-placeholder{opacity:0}
+  }
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold-deep);outline:none}
   .field textarea{resize:vertical;min-height:80px}
   .form-note{font-size:12px;color:var(--text-mute);text-align:center;margin-top:14px}
