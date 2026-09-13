@@ -685,7 +685,7 @@
         <button class="chip" data-filter="drinks" aria-pressed="false">Beverages</button>
       </div>
 
-      <div class="menu-grid reveal" id="menuGrid">
+      <div class="menu-grid" id="menuGrid">
         <h4 class="menu-cat-title" data-cat="kottu">Kottu</h4>
         <div class="menu-item" data-cat="kottu"><div class="menu-thumb p1"><svg aria-hidden="true"><use href="#i-bowl"/></svg></div><div class="menu-item-body"><div class="menu-item-top"><h5>Fish Kottu</h5><span class="price-pill">From Rs. 1,100</span></div></div></div>
         <div class="menu-item" data-cat="kottu"><div class="menu-thumb p2"><svg aria-hidden="true"><use href="#i-bowl"/></svg></div><div class="menu-item-body"><div class="menu-item-top"><h5>Veggie Cheese Dolphin Kottu</h5><span class="price-pill">From Rs. 1,100</span></div></div></div>
@@ -1244,7 +1244,7 @@
       entries.forEach(function(entry){
         if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
     revealEls.forEach(function(el){ io.observe(el); });
   } else {
     revealEls.forEach(function(el){ el.classList.add('in'); });
