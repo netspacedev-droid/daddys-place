@@ -1190,7 +1190,9 @@
     burger.setAttribute('aria-expanded','false');
     document.body.classList.remove('menu-open');
   }
-  burger.addEventListener('click', openMenu);
+  burger.addEventListener('click', function(){
+    if (panel.classList.contains('open')) { closeMenu(); } else { openMenu(); }
+  });
   closeBtn.addEventListener('click', function(){ closeMenu(); burger.focus(); });
   panel.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
   document.addEventListener('keydown', function(e){
