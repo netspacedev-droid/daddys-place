@@ -705,8 +705,7 @@
       </div>
 
       <div class="menu-filters reveal" id="menuFilters" role="tablist" aria-label="Menu categories">
-        <button class="chip active" data-filter="all" aria-pressed="true">All</button>
-        <button class="chip" data-filter="kottu" aria-pressed="false">Kottu</button>
+        <button class="chip active" data-filter="kottu" aria-pressed="true">Kottu</button>
         <button class="chip" data-filter="rice" aria-pressed="false">Rice &amp; Biriyani</button>
         <button class="chip" data-filter="noodles" aria-pressed="false">Noodles &amp; Pasta</button>
         <button class="chip" data-filter="bites" aria-pressed="false">Bites &amp; Starters</button>
@@ -1213,8 +1212,8 @@
       c.classList.toggle('active', on);
       c.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-    items.forEach(function(item){ item.hidden = !(filter === 'all' || item.dataset.cat === filter); });
-    catTitles.forEach(function(t){ t.hidden = !(filter === 'all' || t.dataset.cat === filter); });
+    items.forEach(function(item){ item.hidden = item.dataset.cat !== filter; });
+    catTitles.forEach(function(t){ t.hidden = t.dataset.cat !== filter; });
   }
   chips.forEach(function(chip){
     chip.addEventListener('click', function(){ applyFilter(chip.dataset.filter); });
@@ -1223,6 +1222,7 @@
   document.querySelectorAll('[data-jump]').forEach(function(link){
     link.addEventListener('click', function(){ applyFilter(link.dataset.jump); });
   });
+  if (chips.length) { applyFilter(chips[0].dataset.filter); }
 
   // reservation form -> WhatsApp
   var form = document.getElementById('reserveForm');
