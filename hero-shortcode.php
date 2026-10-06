@@ -58,7 +58,11 @@ add_shortcode( 'xh_hero', function () {
   .xhero .xhero__title span:last-child  { color: var(--xhero-green); }
 
   @media (max-width: 920px) {
-    .xhero__inner { padding-top: 140px; padding-left: 16px; padding-right: 16px; }
+    .xhero__inner { display: flex; flex-direction: column; padding-top: 140px; padding-left: 16px; padding-right: 16px; }
+    /* mobile: heading first, small line goes UNDER it */
+    .xhero .xhero__title  { order: 1; }
+    .xhero .xhero__kicker { order: 2; margin: .5em 0 0; font-size: clamp(18px, 5vw, 28px); }
+    .xhero .xhero__sub    { order: 3; }
   }
 CSS;
 
