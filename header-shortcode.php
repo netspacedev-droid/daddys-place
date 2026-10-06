@@ -138,10 +138,10 @@ add_shortcode( 'xh_header', function () {
   .xh__menu > li.current-menu-ancestor > a { color: #fff; }
   .xh__menu > li.current-menu-item > a,
   .xh__menu > li.current-menu-ancestor > a { font-weight: 700; }
-  /* green tab hanging just below the nav line, behind the hovered / active item */
+  /* green tab crossing the nav line, behind the hovered / active item */
   .xh__menu > li::before {
-    content: ""; position: absolute; left: -16px; right: -16px; top: 0;   /* starts right under the nav line */
-    height: 34px;
+    content: ""; position: absolute; left: -16px; right: -16px; top: -6px;   /* starts a little above the nav line */
+    height: 40px;
     background: linear-gradient(180deg, var(--xh-accent) 0%, rgba(var(--xh-accent-rgb),0) 100%);
     opacity: 0; transition: opacity .25s;
     pointer-events: none;
