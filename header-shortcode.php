@@ -46,6 +46,7 @@ add_shortcode( 'xh_header', function () {
     --xh-overlay-bottom: rgba(0,0,0,0);    /* darkness at the bottom edge (0 = no hard line) */
     --xh-logo-h: 120px;                    /* logo height */
     --xh-height-nav: 56px;
+    --xh-menu-gap: 36px;                   /* space between menu items */
     --xh-max: 1320px;
 
     /* sits on top of the hero/slider below it, so the hero image shows through */
@@ -125,7 +126,7 @@ add_shortcode( 'xh_header', function () {
 
   /* ---------- nav ---------- */
   .xh__nav { border-top: 1px solid rgba(255,255,255,.22); position: relative; }
-  .xh__menu { display: flex; align-items: center; justify-content: space-between; height: var(--xh-height-nav); }
+  .xh__menu { display: flex; align-items: center; justify-content: flex-end; gap: var(--xh-menu-gap); height: var(--xh-height-nav); }
   .xh .xh__menu > li { position: relative; height: 100%; display: flex; align-items: center; margin: 0; padding: 0; line-height: 1; }
   .xh__menu > li > a {
     font-size: 12px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase;
@@ -184,6 +185,7 @@ add_shortcode( 'xh_header', function () {
   @media (max-width: 1100px) {
     .xh__inner { gap: 24px; }
     .xh__top { gap: 18px; }
+    .xh__menu { gap: 24px; }
     .xh__menu > li > a { letter-spacing: 1px; font-size: 11px; }
   }
   @media (max-width: 920px) {
@@ -196,7 +198,7 @@ add_shortcode( 'xh_header', function () {
     .xh__top, .xh__nav { display: none; }
     .xh.is-open .xh__top { display: flex; justify-content: flex-start; padding: 16px 0; gap: 14px 22px; }
     .xh.is-open .xh__nav { display: block; }
-    .xh__menu { flex-direction: column; align-items: stretch; height: auto; }
+    .xh__menu { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; height: auto; }
     .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.1); }
     .xh__menu > li > a { padding: 14px 4px; }
     .xh__menu > li::before { display: none; }
