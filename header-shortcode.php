@@ -30,8 +30,8 @@ add_shortcode( 'xh_header', function () {
 	$email    = 'info@yourdomain.com';
 	$phone    = '(+94) 00 000 0000';
 	$phone_href = 'tel:+94000000000';
-	$cta_text = 'Pay Online';
-	$cta_url  = '/pay-online/';
+	$cta_text = 'Contact Us';
+	$cta_url  = '/contact-us/';
 	// --------------------
 
 	$css = <<<'CSS'
@@ -98,6 +98,7 @@ add_shortcode( 'xh_header', function () {
   .xh__phone { font-size: 18px; font-weight: 600; color: var(--xh-muted); letter-spacing: .5px; white-space: nowrap; }
 
   .xh__search { position: relative; display: flex; align-items: center; }
+  .xh__msearch-slot { display: none; }
   .xh .xh__search-trigger {
     display: flex; align-items: center; gap: 12px; margin: 0;
     padding: 4px 4px 4px 14px; border-radius: 12px; cursor: pointer;
@@ -224,18 +225,22 @@ add_shortcode( 'xh_header', function () {
     .xh__menu > li > a { letter-spacing: 1px; font-size: 11px; }
   }
   @media (max-width: 920px) {
-    .xh__inner { flex-wrap: wrap; gap: 0; padding: 12px 16px; }
+    .xh { background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .xh__inner { flex-wrap: wrap; align-items: center; gap: 0; padding: 10px 16px; }
     .xh .xh__logo { margin-top: 0; }
-    .xh .xh__logo img { height: 64px; }
-    .xh__burger { display: block; }
+    .xh .xh__logo img { height: 46px; }
+    .xh__msearch-slot { display: flex; align-items: center; margin-left: auto; }
+    .xh__burger { display: block; margin-left: 6px; border: 0; }
     .xh__main { flex: 1 0 100%; order: 3; }
     .xh.is-open { background: rgba(0,0,0,.88); }
     .xh__top, .xh__nav { display: none; }
     .xh.is-open .xh__top { display: flex; justify-content: flex-start; padding: 16px 0; gap: 14px 22px; }
     .xh.is-open .xh__nav { display: block; }
-    .xh__search { width: 100%; flex-direction: column; align-items: flex-start; }
-    .xh__search-panel { position: static; width: 100%; max-width: none; margin-top: 10px; display: none; opacity: 1; visibility: visible; transform: none; }
-    .xh__search.is-open .xh__search-panel { display: block; }
+    /* search lives in the top bar on mobile: just the round icon, panel drops under the bar */
+    .xh__search { position: static; }
+    .xh .xh__search-trigger, .xh .xh__search-trigger:hover, .xh .xh__search.is-open .xh__search-trigger { padding: 0; gap: 0; border: 0; background: none; }
+    .xh__search-trigger span { display: none; }
+    .xh__search-panel { top: 100%; left: 12px; right: 12px; width: auto; max-width: none; margin-top: 8px; }
     .xh__menu { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; height: auto; }
     .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.1); }
     .xh__menu > li > a { padding: 14px 4px; }
@@ -278,9 +283,21 @@ CSS;
     var endpoint = s.getAttribute('data-endpoint');
     var timer, ctrl;
 
+    // on mobile the search box sits in the top bar (next to the menu button); on desktop it sits in the top row
+    var slot = h.querySelector('.xh__msearch-slot');
+    var cta = h.querySelector('.xh__cta');
+    function place() {
+      if (!slot || !cta) return;
+      if (window.innerWidth <= 920) { if (s.parentNode !== slot) slot.appendChild(s); }
+      else if (s.parentNode !== cta.parentNode) { cta.parentNode.insertBefore(s, cta); }
+    }
+    place();
+    window.addEventListener('resize', place);
+
     function setOpen(o) {
       s.classList.toggle('is-open', o);
       trigger.setAttribute('aria-expanded', o);
+      if (o && window.innerWidth <= 920) { h.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); }
       if (o) setTimeout(function () { input.focus(); }, 60);
     }
     trigger.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!s.classList.contains('is-open')); });
@@ -343,6 +360,8 @@ JS;
 	    <a class="xh__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Home">
 	      <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 	    </a>
+
+	    <span class="xh__msearch-slot"></span>
 
 	    <button class="xh__burger" type="button" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
 
