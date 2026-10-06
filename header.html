@@ -7,25 +7,21 @@
 <style>
   .xh {
     --xh-accent: #c9a23a;          /* gold accent */
-    --xh-accent-2: #7a5f17;        /* darker gold for gradient */
     --xh-text: #ffffff;
     --xh-muted: #9c8f84;
-    --xh-bg: #070707;
-    --xh-bg-image: none;           /* e.g. url('https://yoursite.com/wp-content/uploads/header-bg.jpg') */
+    --xh-overlay-top: rgba(0,0,0,.55);     /* darkness at the very top  (0 = fully clear, 1 = black) */
+    --xh-overlay-bottom: rgba(0,0,0,.12);  /* darkness at the bottom of the header */
     --xh-height-nav: 56px;
     --xh-max: 1320px;
 
-    position: relative;
+    /* sits on top of the hero/slider below it, so the hero image shows through */
+    position: absolute;
+    top: 0; left: 0; right: 0;
     z-index: 999;
     width: 100%;
     color: var(--xh-text);
     font-family: "Poppins", "Segoe UI", Arial, sans-serif;
-    background-color: var(--xh-bg);
-    background-image:
-      linear-gradient(180deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.72) 100%),
-      var(--xh-bg-image);
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(180deg, var(--xh-overlay-top) 0%, var(--xh-overlay-bottom) 100%);
     box-sizing: border-box;
   }
   .xh *, .xh *::before, .xh *::after { box-sizing: border-box; }
@@ -165,6 +161,7 @@
     .xh__logo small { display: none; }
     .xh__burger { display: block; }
     .xh__main { flex: 1 0 100%; order: 3; }
+    .xh.is-open { background: rgba(0,0,0,.88); }
     .xh__top, .xh__nav { display: none; }
     .xh.is-open .xh__top { display: flex; justify-content: flex-start; padding: 16px 0; gap: 14px 22px; }
     .xh.is-open .xh__nav { display: block; }
