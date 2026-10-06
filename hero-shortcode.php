@@ -17,7 +17,7 @@ add_shortcode( 'xh_hero', function () {
 	$poster_url = '';          // optional: image shown while the video loads (e.g. a .jpg from Media Library)
 	$word_white = 'Digital';   // first word  (white)
 	$word_green = 'Wonders';   // second word (#BAEAA0)
-	$kicker     = '';          // optional small line ABOVE the heading
+	$kicker     = 'Affordable Advertising Solutions';   // small line ABOVE the heading (leave '' to hide)
 	$sub        = '';          // optional small line BELOW the heading
 	// --------------------
 
