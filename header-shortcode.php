@@ -39,6 +39,7 @@ add_shortcode( 'xh_header', function () {
     --xh-accent: #00853F;          /* green accent (match logo) */
     --xh-accent-dark: #006b32;     /* darker green for button gradient */
     --xh-accent-rgb: 0,133,63;     /* same green as r,g,b (used for fades) */
+    --xh-accent-light: #22b866;    /* lighter green for text/icons on black (mobile menu) */
     --xh-text: #ffffff;
     --xh-muted: #9c8f84;
     --xh-overlay-top: rgba(0,0,0,.95);     /* darkness at the very top  (0 = fully clear, 1 = black) */
@@ -202,20 +203,20 @@ add_shortcode( 'xh_header', function () {
   .xh__menu .sub-menu a:hover { background: var(--xh-accent); color: #fff; }
 
   /* hamburger */
-  .xh__burger {
-    display: none; margin-left: auto; align-self: center;
-    width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.3); border-radius: 8px;
-    background: transparent; cursor: pointer; padding: 0; position: relative;
+  .xh .xh__burger {
+    display: none; align-items: center; gap: 10px; align-self: center;
+    height: 44px; min-height: 0; padding: 0 4px; margin: 0 0 0 6px; border: 0; border-radius: 0;
+    background: none; box-shadow: none; color: #fff; cursor: pointer; text-transform: none; letter-spacing: 0;
   }
-  .xh__burger span, .xh__burger span::before, .xh__burger span::after {
-    content: ""; position: absolute; left: 11px; right: 11px; height: 2px; background: #fff; transition: .25s;
-  }
-  .xh__burger span { top: 21px; }
-  .xh__burger span::before { left: 0; right: 0; top: -7px; }
-  .xh__burger span::after  { left: 0; right: 0; top: 7px; }
-  .xh.is-open .xh__burger span { background: transparent; }
-  .xh.is-open .xh__burger span::before { top: 0; transform: rotate(45deg); }
-  .xh.is-open .xh__burger span::after  { top: 0; transform: rotate(-45deg); }
+  .xh__burger-ico, .xh__burger-ico::before, .xh__burger-ico::after { display: block; width: 26px; height: 2px; background: #fff; transition: .25s; }
+  .xh__burger-ico { position: relative; }
+  .xh__burger-ico::before, .xh__burger-ico::after { content: ""; position: absolute; left: 0; }
+  .xh__burger-ico::before { top: -8px; }
+  .xh__burger-ico::after  { top: 8px; }
+  .xh__burger-txt { display: none; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .xh.is-open .xh__burger-ico { background: transparent; }
+  .xh.is-open .xh__burger-ico::before { top: 0; transform: rotate(45deg); background: var(--xh-accent-light); }
+  .xh.is-open .xh__burger-ico::after  { top: 0; transform: rotate(-45deg); background: var(--xh-accent-light); }
 
   /* ---------- tablet / mobile ---------- */
   @media (max-width: 1100px) {
@@ -230,27 +231,55 @@ add_shortcode( 'xh_header', function () {
     .xh .xh__logo { margin-top: 0; }
     .xh .xh__logo img { height: 46px; }
     .xh__msearch-slot { display: flex; align-items: center; margin-left: auto; }
-    .xh__burger { display: block; margin-left: 6px; border: 0; }
+    .xh .xh__burger { display: flex; }
     .xh__main { flex: 1 0 100%; order: 3; }
-    .xh.is-open { background: rgba(0,0,0,.88); }
     .xh__top, .xh__nav { display: none; }
-    .xh.is-open .xh__top { display: flex; justify-content: flex-start; padding: 16px 0; gap: 14px 22px; }
-    .xh.is-open .xh__nav { display: block; }
+
+    /* ---- full-screen menu ---- */
+    .xh.is-open {
+      position: fixed; top: 0; right: 0; bottom: 0; left: 0; overflow-y: auto; overscroll-behavior: contain;
+      background: rgba(6,6,6,.97); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    }
+    body.admin-bar .xh.is-open { top: 46px; }
+    .xh.is-open .xh__msearch-slot { display: none; }
+    .xh.is-open .xh__burger { margin-left: auto; }
+    .xh.is-open .xh__burger-txt { display: block; }
+    .xh.is-open .xh__main { padding-bottom: 40px; }
+    .xh.is-open .xh__top { display: contents; }
+    .xh.is-open .xh__nav { display: block; order: 1; border-top: 0; margin-top: 6px; }
+    .xh.is-open .xh__cta {
+      order: -1; display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin: 8px -16px 0; padding: 24px 16px; border-radius: 0; box-shadow: none;
+      font-size: 20px; letter-spacing: 2px;
+    }
+    .xh.is-open .xh__cta::after { content: "\2192"; font-size: 26px; line-height: 1; letter-spacing: 0; }
+    .xh.is-open .xh__contact, .xh.is-open .xh__phone { order: 5; padding: 18px 4px 0; }
+
     /* search lives in the top bar on mobile: just the round icon, panel drops under the bar */
     .xh__search { position: static; }
     .xh .xh__search-trigger, .xh .xh__search-trigger:hover, .xh .xh__search.is-open .xh__search-trigger { padding: 0; gap: 0; border: 0; background: none; }
     .xh__search-trigger span { display: none; }
     .xh__search-panel { top: 100%; left: 12px; right: 12px; width: auto; max-width: none; margin-top: 8px; }
+
+    /* big menu items */
     .xh__menu { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; height: auto; }
-    .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.1); }
-    .xh__menu > li > a { padding: 14px 4px; }
+    .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.2); }
+    .xh .xh__menu > li:last-child { border-bottom: 0; }
+    .xh__menu > li > a { padding: 24px 4px; font-size: 20px; letter-spacing: .5px; justify-content: space-between; }
     .xh__menu > li::before { display: none; }
-    .xh__menu > li.current-menu-item > a,
-    .xh__menu > li.current-menu-ancestor > a { box-shadow: inset 3px 0 0 var(--xh-accent); padding-left: 12px; }
     .xh__menu > li:hover > a { color: #fff; }
-    .xh__menu .sub-menu { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-top: 0; background: transparent; display: none; padding: 0 0 8px 14px; }
+    .xh__menu > li.current-menu-item > a,
+    .xh__menu > li.current-menu-ancestor > a { color: var(--xh-accent-light); }
+    .xh__menu > li.menu-item-has-children > a::after { content: "+"; width: auto; height: auto; border: 0; font-size: 28px; font-weight: 400; line-height: 1; }
+    .xh__menu > li.is-sub-open > a::after { content: "\2212"; }
+    .xh__menu .sub-menu { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-top: 0; background: transparent; display: none; padding: 0 0 12px 14px; }
+    .xh__menu .sub-menu a { padding: 12px 4px; font-size: 16px; letter-spacing: .5px; color: #ddd; }
+    .xh__menu .sub-menu a:hover { background: none; color: var(--xh-accent-light); }
     .xh__menu > li.is-sub-open > .sub-menu { display: block; }
   }
+
+  /* page can't scroll behind the full-screen menu */
+  html.xh-lock, html.xh-lock body { overflow: hidden; }
 CSS;
 
 	$js = <<<'JS'
@@ -260,10 +289,19 @@ CSS;
 
   // mobile menu toggle
   var burger = h.querySelector('.xh__burger');
+  var root = document.documentElement;
+  function closeMenu() {
+    h.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    root.classList.remove('xh-lock');
+  }
   burger.addEventListener('click', function () {
     var open = h.classList.toggle('is-open');
     burger.setAttribute('aria-expanded', open);
+    root.classList.toggle('xh-lock', open && window.innerWidth <= 920);   // no page scroll behind the full-screen menu
   });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 920) closeMenu(); });
 
   // mobile: tap "Products" to open its sub menu
   h.querySelectorAll('.xh__menu > li').forEach(function (li) {
@@ -297,7 +335,7 @@ CSS;
     function setOpen(o) {
       s.classList.toggle('is-open', o);
       trigger.setAttribute('aria-expanded', o);
-      if (o && window.innerWidth <= 920) { h.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); }
+      if (o && window.innerWidth <= 920) closeMenu();
       if (o) setTimeout(function () { input.focus(); }, 60);
     }
     trigger.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!s.classList.contains('is-open')); });
@@ -363,7 +401,7 @@ JS;
 
 	    <span class="xh__msearch-slot"></span>
 
-	    <button class="xh__burger" type="button" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+	    <button class="xh__burger" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="xh__burger-ico"></span><b class="xh__burger-txt">Menu</b></button>
 
 	    <div class="xh__main">
 	      <div class="xh__top">
