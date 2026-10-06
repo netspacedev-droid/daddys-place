@@ -1,10 +1,40 @@
-<!--
-  Custom header — paste everything below into an Elementor Pro "HTML" widget
-  (Theme Builder > Header). Self-contained: HTML + CSS + a little JS.
-  All classes are prefixed "xh-" so they don't clash with Woodmart.
-  Edit the CSS variables in :root-like block ".xh" to change colours / background.
--->
-<style>
+<?php
+/**
+ * Custom header shortcode: [xh_header]
+ *
+ * Install: WordPress admin > Snippets (Code Snippets plugin) > Add New > paste this
+ * (without the opening <?php line if the plugin adds it) > "Run snippet everywhere" > Save & Activate.
+ * (Or paste it at the end of your CHILD theme's functions.php.)
+ *
+ * Then in Elementor Theme Builder > Header, drop a "Shortcode" widget and enter:  [xh_header]
+ *
+ * The menu is read from the WordPress menu named "Main Menu" (Appearance > Menus),
+ * so any link you add/remove/re-order there shows up in the header automatically.
+ */
+
+add_shortcode( 'xh_header', function () {
+
+	// Menu name (or slug / ID) from Appearance > Menus
+	$menu = wp_nav_menu( array(
+		'menu'        => 'Main Menu',
+		'container'   => false,
+		'menu_class'  => 'xh__menu',
+		'menu_id'     => '',
+		'depth'       => 2,
+		'echo'        => false,
+		'fallback_cb' => false,
+	) );
+
+	// ---- edit these ----
+	$logo_url = 'https://palegoldenrod-tarsier-648955.hostingersite.com/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-06-at-9.50.39-AM.jpeg';
+	$email    = 'info@yourdomain.com';
+	$phone    = '(+94) 00 000 0000';
+	$phone_href = 'tel:+94000000000';
+	$cta_text = 'Pay Online';
+	$cta_url  = '/pay-online/';
+	// --------------------
+
+	$css = <<<'CSS'
   .xh {
     --xh-accent: #00853F;          /* green accent (match logo) */
     --xh-accent-dark: #006b32;     /* darker green for button gradient */
@@ -103,8 +133,10 @@
     transition: color .2s; white-space: nowrap; line-height: 1;
   }
   .xh__menu > li:hover > a,
-  .xh__menu > li.is-active > a { color: #fff; }
-  .xh__menu > li.is-active > a { font-weight: 700; }
+  .xh__menu > li.current-menu-item > a,
+  .xh__menu > li.current-menu-ancestor > a { color: #fff; }
+  .xh__menu > li.current-menu-item > a,
+  .xh__menu > li.current-menu-ancestor > a { font-weight: 700; }
   /* green tab that rises above the hovered / active item */
   .xh__menu > li::before {
     content: ""; position: absolute; left: -16px; right: -16px; bottom: 100%;
@@ -115,20 +147,22 @@
   }
   .xh__menu > li:hover::before,
   .xh__menu > li:focus-within::before,
-  .xh__menu > li.is-active::before { opacity: 1; }
-  .xh__caret { width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid currentColor; }
+  .xh__menu > li.current-menu-item::before,
+  .xh__menu > li.current-menu-ancestor::before { opacity: 1; }
+  .xh__menu > li.menu-item-has-children > a::after { content: ""; width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid currentColor; }
 
   /* dropdown */
-  .xh__sub {
+  .xh__menu .sub-menu {
     position: absolute; top: 100%; left: -16px; min-width: 220px;
     background: #101010; border-top: 2px solid var(--xh-accent);
     padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(8px);
     transition: .2s; box-shadow: 0 12px 30px rgba(0,0,0,.5);
   }
-  .xh__menu > li:hover > .xh__sub,
-  .xh__menu > li:focus-within > .xh__sub { opacity: 1; visibility: visible; transform: none; }
-  .xh__sub a { display: block; padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #ddd; }
-  .xh__sub a:hover { background: var(--xh-accent); color: #fff; }
+  .xh__menu > li:hover > .sub-menu,
+  .xh__menu > li:focus-within > .sub-menu { opacity: 1; visibility: visible; transform: none; }
+  .xh__menu .sub-menu li { margin: 0; padding: 0; }
+  .xh__menu .sub-menu a { display: block; padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #ddd; }
+  .xh__menu .sub-menu a:hover { background: var(--xh-accent); color: #fff; }
 
   /* hamburger */
   .xh__burger {
@@ -166,66 +200,15 @@
     .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.1); }
     .xh__menu > li > a { padding: 14px 4px; }
     .xh__menu > li::before { display: none; }
-    .xh__menu > li.is-active > a { box-shadow: inset 3px 0 0 var(--xh-accent); padding-left: 12px; }
+    .xh__menu > li.current-menu-item > a,
+    .xh__menu > li.current-menu-ancestor > a { box-shadow: inset 3px 0 0 var(--xh-accent); padding-left: 12px; }
     .xh__menu > li:hover > a { color: #fff; }
-    .xh__sub { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-top: 0; background: transparent; display: none; padding: 0 0 8px 14px; }
-    .xh__menu > li.is-sub-open > .xh__sub { display: block; }
+    .xh__menu .sub-menu { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-top: 0; background: transparent; display: none; padding: 0 0 8px 14px; }
+    .xh__menu > li.is-sub-open > .sub-menu { display: block; }
   }
-</style>
+CSS;
 
-<header class="xh" id="xh">
-  <div class="xh__inner">
-
-    <a class="xh__logo" href="/" aria-label="Home">
-      <img src="https://palegoldenrod-tarsier-648955.hostingersite.com/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-06-at-9.50.39-AM.jpeg" alt="Logo">
-    </a>
-
-    <button class="xh__burger" type="button" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
-
-    <div class="xh__main">
-      <div class="xh__top">
-        <div class="xh__contact"><span>e-mail :</span><a href="mailto:info@yourdomain.com">info@yourdomain.com</a></div>
-        <a class="xh__phone" href="tel:+94000000000">(+94) 00 000 0000</a>
-
-        <div class="xh__search" id="xhSearch">
-          <form role="search" action="/" method="get">
-            <label for="xhq">Search Products</label>
-            <input id="xhq" type="search" name="s" placeholder="Search…">
-            <input type="hidden" name="post_type" value="product">
-            <button class="xh__search-btn" type="button" aria-label="Search">
-              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            </button>
-          </form>
-        </div>
-
-        <a class="xh__cta" href="/pay-online/">Pay Online</a>
-      </div>
-
-      <nav class="xh__nav" aria-label="Main">
-        <ul class="xh__menu">
-          <li class="is-active"><a href="/">Home</a></li>
-          <li><a href="/about-us/">About Us</a></li>
-          <li>
-            <a href="/products/">Products <i class="xh__caret"></i></a>
-            <ul class="xh__sub">
-              <li><a href="/products/category-one/">Category One</a></li>
-              <li><a href="/products/category-two/">Category Two</a></li>
-              <li><a href="/products/category-three/">Category Three</a></li>
-            </ul>
-          </li>
-          <li><a href="/industries/">Industries</a></li>
-          <li><a href="/studio/">Studio</a></li>
-          <li><a href="/subsidiaries/">Subsidiaries</a></li>
-          <li><a href="/client-journey/">Client Journey</a></li>
-          <li><a href="/news/">News</a></li>
-          <li><a href="/contact-us/">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<script>
+	$js = <<<'JS'
 (function () {
   var h = document.getElementById('xh');
   if (!h) return;
@@ -239,7 +222,7 @@
 
   // mobile: tap "Products" to open its sub menu
   h.querySelectorAll('.xh__menu > li').forEach(function (li) {
-    var sub = li.querySelector('.xh__sub');
+    var sub = li.querySelector('.sub-menu');
     if (!sub) return;
     li.firstElementChild.addEventListener('click', function (e) {
       if (window.innerWidth <= 920) { e.preventDefault(); li.classList.toggle('is-sub-open'); }
@@ -256,4 +239,48 @@
     else { s.classList.remove('is-open'); }
   });
 })();
-</script>
+JS;
+
+	ob_start();
+	?>
+	<style><?php echo $css; // phpcs:ignore ?></style>
+
+	<header class="xh" id="xh">
+	  <div class="xh__inner">
+
+	    <a class="xh__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Home">
+	      <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+	    </a>
+
+	    <button class="xh__burger" type="button" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+
+	    <div class="xh__main">
+	      <div class="xh__top">
+	        <div class="xh__contact"><span>e-mail :</span><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></div>
+	        <a class="xh__phone" href="<?php echo esc_attr( $phone_href ); ?>"><?php echo esc_html( $phone ); ?></a>
+
+	        <div class="xh__search" id="xhSearch">
+	          <form role="search" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get">
+	            <label for="xhq">Search Products</label>
+	            <input id="xhq" type="search" name="s" placeholder="Search…">
+	            <input type="hidden" name="post_type" value="product">
+	            <button class="xh__search-btn" type="button" aria-label="Search">
+	              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+	            </button>
+	          </form>
+	        </div>
+
+	        <a class="xh__cta" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $cta_text ); ?></a>
+	      </div>
+
+	      <nav class="xh__nav" aria-label="Main">
+	        <?php echo $menu; // phpcs:ignore ?>
+	      </nav>
+	    </div>
+	  </div>
+	</header>
+
+	<script><?php echo $js; // phpcs:ignore ?></script>
+	<?php
+	return ob_get_clean();
+} );
