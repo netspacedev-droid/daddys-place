@@ -67,20 +67,55 @@
   .xh__contact span { margin-right: 6px; }
   .xh__phone { font-size: 18px; font-weight: 600; color: var(--xh-muted); letter-spacing: .5px; white-space: nowrap; }
 
-  .xh__search { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; }
-  .xh .xh__search label { color: #fff; margin: 0; font-size: 12px; font-weight: 600; white-space: nowrap; line-height: 1; }
-  .xh__search form { display: flex; align-items: center; gap: 10px; margin: 0; }
-  .xh__search input {
-    width: 0; opacity: 0; padding: 0; border: 0; outline: 0;
-    background: rgba(255,255,255,.12); color: #fff; height: 34px; border-radius: 17px;
-    font: inherit; transition: width .25s, opacity .25s, padding .25s;
+  .xh__search { position: relative; display: flex; align-items: center; }
+  .xh .xh__search-trigger {
+    display: flex; align-items: center; gap: 12px; margin: 0;
+    padding: 4px 4px 4px 14px; border-radius: 12px; cursor: pointer;
+    background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.28); box-shadow: none;
+    color: #fff; font: 600 12px/1 inherit; font-family: inherit; text-transform: none; letter-spacing: 0; min-height: 0;
+    transition: border-color .2s;
   }
-  .xh__search.is-open input { width: 170px; opacity: 1; padding: 0 14px; }
-  .xh__search-btn {
-    width: 34px; height: 34px; border-radius: 50%; border: 0; cursor: pointer;
-    background: var(--xh-accent); display: grid; place-items: center; padding: 0;
+  .xh .xh__search-trigger:hover, .xh .xh__search.is-open .xh__search-trigger { border-color: var(--xh-accent); background: rgba(0,0,0,.35); color: #fff; }
+  .xh__search-ico { width: 34px; height: 34px; border-radius: 50%; background: var(--xh-accent); display: grid; place-items: center; }
+  .xh__search-ico svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.4; }
+
+  /* dropdown search panel */
+  .xh__search-panel {
+    position: absolute; top: calc(100% + 16px); right: -40px; z-index: 5;
+    width: 440px; max-width: calc(100vw - 32px); padding: 14px;
+    background: rgba(14,14,14,.96); border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.6);
+    opacity: 0; visibility: hidden; transform: translateY(8px); transition: .2s;
   }
-  .xh__search-btn svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.4; }
+  .xh__search.is-open .xh__search-panel { opacity: 1; visibility: visible; transform: none; }
+  .xh__search-form { display: flex; gap: 10px; margin: 0; }
+  .xh .xh__search-form input[type=search] {
+    flex: 1; min-width: 0; height: 46px; margin: 0; padding: 0 16px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: #fff;
+    font-size: 16px; outline: 0; box-shadow: none; -webkit-appearance: none; appearance: none;
+  }
+  .xh .xh__search-form input[type=search]::placeholder { color: rgba(255,255,255,.55); }
+  .xh .xh__search-form input[type=search]:focus { border-color: var(--xh-accent); }
+  .xh .xh__search-form input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+  .xh .xh__search-go {
+    height: 46px; margin: 0; padding: 0 22px; border: 0; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(180deg, var(--xh-accent), var(--xh-accent-dark)); color: #fff;
+    font-size: 14px; font-weight: 700; text-transform: none; letter-spacing: 0; box-shadow: none; min-height: 0;
+  }
+  .xh .xh__search-go:hover { filter: brightness(1.15); color: #fff; }
+
+  /* live results */
+  .xh__results { display: none; margin-top: 10px; max-height: 340px; overflow: auto; }
+  .xh__results.has-content { display: block; }
+  .xh__res { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 10px; color: #fff; }
+  .xh__res:hover { background: rgba(255,255,255,.08); }
+  .xh__res img { width: 48px; height: 48px; flex: none; object-fit: cover; border-radius: 8px; background: #222; }
+  .xh__res-t { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .xh__res-p { font-size: 13px; color: #9be3b6; white-space: nowrap; }
+  .xh__res-p del { opacity: .5; margin-right: 4px; }
+  .xh__res-p ins { text-decoration: none; }
+  .xh__res-msg { padding: 10px 8px; font-size: 13px; color: #bbb; }
+  .xh__res-all { display: block; margin-top: 4px; padding: 10px; text-align: center; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
 
   .xh__cta {
     display: inline-block;
@@ -164,6 +199,9 @@
     .xh__top, .xh__nav { display: none; }
     .xh.is-open .xh__top { display: flex; justify-content: flex-start; padding: 16px 0; gap: 14px 22px; }
     .xh.is-open .xh__nav { display: block; }
+    .xh__search { width: 100%; flex-direction: column; align-items: flex-start; }
+    .xh__search-panel { position: static; width: 100%; max-width: none; margin-top: 10px; display: none; opacity: 1; visibility: visible; transform: none; }
+    .xh__search.is-open .xh__search-panel { display: block; }
     .xh__menu { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; height: auto; }
     .xh .xh__menu > li { height: auto; flex-direction: column; align-items: stretch; border-bottom: 1px solid rgba(255,255,255,.1); }
     .xh__menu > li > a { padding: 14px 4px; }
@@ -189,15 +227,19 @@
         <div class="xh__contact"><span>e-mail :</span><a href="mailto:info@yourdomain.com">info@yourdomain.com</a></div>
         <a class="xh__phone" href="tel:+94000000000">(+94) 00 000 0000</a>
 
-        <div class="xh__search" id="xhSearch">
-          <form role="search" action="/" method="get">
-            <label for="xhq">Search Products</label>
-            <input id="xhq" type="search" name="s" placeholder="Search…">
-            <input type="hidden" name="post_type" value="product">
-            <button class="xh__search-btn" type="button" aria-label="Search">
-              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            </button>
-          </form>
+        <div class="xh__search" id="xhSearch" data-endpoint="/wp-json/wc/store/v1/products">
+          <button class="xh__search-trigger" type="button" aria-expanded="false" aria-controls="xhSearchPanel">
+            <span>Search Products</span>
+            <i class="xh__search-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></i>
+          </button>
+          <div class="xh__search-panel" id="xhSearchPanel">
+            <form class="xh__search-form" role="search" action="/" method="get">
+              <input type="search" name="s" placeholder="Search Products..." autocomplete="off" aria-label="Search Products">
+              <input type="hidden" name="post_type" value="product">
+              <button class="xh__search-go" type="submit">Search</button>
+            </form>
+            <div class="xh__results" id="xhResults" aria-live="polite"></div>
+          </div>
         </div>
 
         <a class="xh__cta" href="/pay-online/">Pay Online</a>
@@ -248,14 +290,66 @@
     });
   });
 
-  // search: first click opens the field, second click submits
+  // search: click the box to open the panel, live product results while typing
   var s = document.getElementById('xhSearch');
-  var btn = s.querySelector('.xh__search-btn');
-  var input = s.querySelector('input[type=search]');
-  btn.addEventListener('click', function () {
-    if (!s.classList.contains('is-open')) { s.classList.add('is-open'); input.focus(); }
-    else if (input.value.trim()) { s.querySelector('form').submit(); }
-    else { s.classList.remove('is-open'); }
-  });
+  if (s) {
+    var trigger = s.querySelector('.xh__search-trigger');
+    var input = s.querySelector('input[type=search]');
+    var box = document.getElementById('xhResults');
+    var endpoint = s.getAttribute('data-endpoint');
+    var timer, ctrl;
+
+    function setOpen(o) {
+      s.classList.toggle('is-open', o);
+      trigger.setAttribute('aria-expanded', o);
+      if (o) setTimeout(function () { input.focus(); }, 60);
+    }
+    trigger.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!s.classList.contains('is-open')); });
+    document.addEventListener('click', function (e) { if (!s.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+    function decode(t) { return new DOMParser().parseFromString(t || '', 'text/html').documentElement.textContent; }
+    function price(p) {
+      if (p.price_html) return p.price_html;
+      var pr = p.prices; if (!pr) return '';
+      var m = pr.currency_minor_unit || 0;
+      return (pr.currency_prefix || '') + (parseInt(pr.price, 10) / Math.pow(10, m)).toFixed(m) + (pr.currency_suffix || '');
+    }
+    function clear() { box.innerHTML = ''; box.className = 'xh__results'; }
+    function render(items) {
+      box.innerHTML = '';
+      if (!items.length) {
+        var msg = document.createElement('div'); msg.className = 'xh__res-msg'; msg.textContent = 'No products found.';
+        box.appendChild(msg);
+      } else {
+        items.forEach(function (p) {
+          var a = document.createElement('a'); a.className = 'xh__res'; a.href = p.permalink;
+          if (p.images && p.images[0]) { var im = document.createElement('img'); im.src = p.images[0].thumbnail || p.images[0].src; im.alt = ''; a.appendChild(im); }
+          var t = document.createElement('span'); t.className = 'xh__res-t'; t.textContent = decode(p.name); a.appendChild(t);
+          var pp = document.createElement('span'); pp.className = 'xh__res-p'; pp.innerHTML = price(p); a.appendChild(pp);
+          box.appendChild(a);
+        });
+        var all = document.createElement('a'); all.className = 'xh__res-all'; all.href = '#'; all.textContent = 'View all results';
+        all.addEventListener('click', function (e) { e.preventDefault(); s.querySelector('form').submit(); });
+        box.appendChild(all);
+      }
+      box.className = 'xh__results has-content';
+    }
+    function search(q) {
+      if (ctrl) ctrl.abort();
+      ctrl = window.AbortController ? new AbortController() : null;
+      var url = endpoint + (endpoint.indexOf('?') > -1 ? '&' : '?') + 'search=' + encodeURIComponent(q) + '&per_page=6';
+      fetch(url, ctrl ? { signal: ctrl.signal } : {})
+        .then(function (r) { return r.json(); })
+        .then(function (d) { if (input.value.trim() === q && Array.isArray(d)) render(d); })
+        .catch(function () {});
+    }
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var q = input.value.trim();
+      if (q.length < 2) { clear(); return; }
+      timer = setTimeout(function () { search(q); }, 250);
+    });
+  }
 })();
 </script>
